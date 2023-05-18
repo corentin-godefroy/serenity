@@ -918,6 +918,11 @@ impl PartialGuild {
     /// Returns [`Error::Http`] if the current user lacks permission.
     ///
     /// [Manage Roles]: Permissions::MANAGE_ROLES
+    ///
+    /// # Note
+    /// This function can have unexpected results if multiple roles have not been ordered
+    /// previously.
+    /// Use edit_roles_positions instead to order multiple roles at once.
     #[inline]
     pub async fn edit_role_position(
         &self,
@@ -926,6 +931,27 @@ impl PartialGuild {
         position: u64,
     ) -> Result<Vec<Role>> {
         self.id.edit_role_position(&http, role_id, position).await
+    }
+
+    /// Re-orders the roles of the guild.
+    ///
+    /// Although not required, you should specify all roles' positions,
+    /// regardless of whether they were updated. Otherwise, positioning can
+    /// be not as expected.
+    ///
+    /// **Note**: Requires the [Manage Roles] permission.
+    ///
+    /// # Errors
+    ///
+    /// Returns an [`Error::Http`] if the current user is lacking permission.
+    ///
+    /// [Manage Channels]: Permissions::MANAGE_ROLES
+    #[inline]
+    pub async fn edit_roles_positions<It>(&self, http: impl AsRef<Http>, roles: It) -> Result<Vec<Role>>
+        where
+            It: IntoIterator<Item = (RoleId, u64)>,
+    {
+        self.id.edit_roles_positions(&http, roles).await
     }
 
     /// Edits a sticker, optionally setting its fields.
