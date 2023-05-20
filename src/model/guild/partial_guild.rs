@@ -947,11 +947,11 @@ impl PartialGuild {
     ///
     /// [Manage Channels]: Permissions::MANAGE_ROLES
     #[inline]
-    pub async fn edit_roles_positions<It>(&self, http: impl AsRef<Http>, roles: It) -> Result<Vec<Role>>
+    pub async fn edit_roles_positions<It>(&self, http: impl AsRef<Http>, roles: It) -> Result<()>
         where
             It: IntoIterator<Item = (RoleId, u64)>,
     {
-        self.id.edit_roles_positions(&http, roles).await
+        self.id.reorder_roles(&http, roles).await
     }
 
     /// Edits a sticker, optionally setting its fields.

@@ -855,6 +855,24 @@ impl GuildId {
         http.as_ref().edit_role_position(self.0, role_id.into().0, position, None).await
     }
 
+    pub async fn reorder_roles<It>(self, http: impl AsRef<Http>, roles: It) -> Result<()>
+        where
+            It: IntoIterator<Item = (RoleId, u64)>,
+    {
+        let items = roles
+            .into_iter()
+            .map(|(id, pos)| {
+                json!({
+                    "id": id,
+                    "position": pos,
+                })
+            })
+            .collect::<Vec<_>>();
+
+        http.as_ref().edit_roles_positions(self.0, &Value::from(items), None).await
+    }
+
+
     /// Edits the [`GuildWelcomeScreen`].
     ///
     /// # Errors
