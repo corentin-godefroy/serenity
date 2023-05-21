@@ -855,7 +855,7 @@ impl GuildId {
         http.as_ref().edit_role_position(self.0, role_id.into().0, position, None).await
     }
 
-    pub async fn reorder_roles<It>(self, http: impl AsRef<Http>, roles: It) -> Result<()>
+    pub async fn reorder_roles<It>(self, http: impl AsRef<Http>, roles: It) -> Result<Vec<Role>>
         where
             It: IntoIterator<Item = (RoleId, u64)>,
     {

@@ -1901,7 +1901,7 @@ impl Http {
     }
 
     /// Edits the positions of a guild's channels.
-    pub async fn edit_roles_positions(&self, guild_id: u64, value: &Value, audit_log_reason: Option<&str>) -> Result<()> {
+    pub async fn edit_roles_positions(&self, guild_id: u64, value: &Value, audit_log_reason: Option<&str>) -> Result<Vec<Role>> {
         let body = to_vec(value)?;
 
         // self.wind(204, Request {
@@ -1938,6 +1938,21 @@ impl Http {
         from_value(value).map_err(From::from)
 
     }
+
+    // /// Edits the positions of a guild's channels.
+    // pub async fn edit_guild_channel_positions(&self, guild_id: u64, value: &Value) -> Result<()> {
+    //     let body = to_vec(value)?;
+    //
+    //     self.wind(204, Request {
+    //         body: Some(&body),
+    //         multipart: None,
+    //         headers: None,
+    //         route: RouteInfo::EditGuildChannels {
+    //             guild_id,
+    //         },
+    //     })
+    //         .await
+    // }
 
     /// Modifies a scheduled event.
     ///
